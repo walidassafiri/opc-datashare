@@ -1,0 +1,248 @@
+openapi: 3.0.3
+info:
+  title: DataShare API
+  description: API REST permettant le partage de fichiers via des liens temporaires
+  version: 1.0.0
+
+servers:
+  - url: /api
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+
+    FileMetadata:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        size:
+          type: integer
+        uploadedAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          example: VALID
+
+    DownloadInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+        expiresAt:
+          type: string
+          format: date-time
+        passwordProtected:
+          type: boolean
+
+    PasswordRequest:
+      type: object
+      properties:
+        password:
+          type: string
+
+paths:
+
+  /auth/register:
+    post:
+      summary: Création de compte utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Compte créé
+        '400':
+          description: Données invalides
+
+  /auth/login:
+    post:
+      summary: Connexion utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Connexion réussie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Identifiants invalides
+
+  /files:
+    post:
+      summary: Upload de fichier (authentifié)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                expirationDays:
+                  type: integer
+                  minimum: 1
+                  maximum: 7
+                password:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Fichier uploadé
+        '401':
+          description: Non authentifié
+
+    get:
+      summary: Historique des fichiers utilisateur
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Liste des fichiers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileMetadata'
+
+  /files/anonymous:
+    post:
+      summary: Upload de fichier anonyme
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                expirationDays:
+                  type: integer
+                  minimum: 1
+                  maximum: 7
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Fichier uploadé anonymement
+
+  /files/{token}:
+    get:
+      summary: Métadonnées du fichier
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Métadonnées du fichier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DownloadInfo'
+        '404':
+          description: Fichier introuvable
+        '410':
+          description: Fichier expiré
+
+  /files/{token}/download:
+    post:
+      summary: Télécharger un fichier
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordRequest'
+      responses:
+        '200':
+          description: Téléchargement du fichier
+        '401':
+          description: Mot de passe invalide
+
+  /files/{id}:
+    delete:
+      summary: Suppression d’un fichier
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Fichier supprimé
+        '403':
+          description: Accès interdit
