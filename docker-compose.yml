@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: opc
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: opcdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: opcdb
+      DB_USER: opc
+      DB_PASSWORD: secret
+      JWT_SECRET: 0G+FvoDiwrehK2Vs/ycaBA3JBZq8NpvsvyoyYnmktB4=
+      JWT_ALGORITHM: HS256
+      JWT_EXPIRATION_MS: 3600000
+    ports:
+      - "8080:8080"
+
+volumes:
+  db-data:
