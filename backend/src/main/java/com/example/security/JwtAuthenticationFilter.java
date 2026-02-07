@@ -17,10 +17,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil, CustomUserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, CustomUserDetailsService userDetailsService, TokenBlacklistService tokenBlacklistService) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -30,7 +32,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String header = request.getHeader("Authorization");
             if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
                 String token = header.substring(7);
-                if (jwtUtil.validateToken(token)) {
+                // if token is blacklisted, treat as invalid
+                if (tokenBlacklistService.isBlacklisted(token)) {
+                    // do not set authentication
+                } else if (jwtUtil.validateToken(token)) {
                     String email = jwtUtil.extractSubject(token);
                     var userDetails = userDetailsService.loadUserByUsername(email);
                     var auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

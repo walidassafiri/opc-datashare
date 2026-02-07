@@ -25,5 +25,14 @@ export class AuthService {
   saveToken(token: string) { localStorage.setItem(this.TOKEN_KEY, token); }
   getToken(): string | null { return localStorage.getItem(this.TOKEN_KEY); }
   isAuthenticated(): boolean { return !!this.getToken(); }
-  logout() { localStorage.removeItem(this.TOKEN_KEY); }
+
+  logoutLocal() { localStorage.removeItem(this.TOKEN_KEY); }
+
+  logout(): Observable<any> {
+    // call backend logout endpoint, clear token locally regardless of result
+    return this.http.post('/api/auth/logout', {}).pipe(
+      // always clear token locally after call
+      tap(() => this.logoutLocal())
+    );
+  }
 }

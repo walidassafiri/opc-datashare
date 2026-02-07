@@ -1,8 +1,13 @@
-<nav>
-  <a routerLink="/">Home</a> | 
-  <a routerLink="/login">Login</a> | 
-  <a routerLink="/register">Register</a> | 
-  <a routerLink="/upload">Upload</a>
-</nav>
-<hr>
-<router-outlet></router-outlet>
+<header class="app-header">
+  <div class="brand"><div class="logo" aria-hidden></div> <div>DataShare</div></div>
+  <nav class="app-nav">
+    <a routerLink="/">Home</a>
+    <a *ngIf="!isAuthenticated()" routerLink="/login">Login</a>
+    <a *ngIf="!isAuthenticated()" routerLink="/register">Register</a>
+    <a routerLink="/upload">Upload</a>
+    <button *ngIf="isAuthenticated()" (click)="logout()" style="margin-left:0.75rem">Logout</button>
+  </nav>
+</header>
+<main class="container">
+  <router-outlet></router-outlet>
+</main>

@@ -1,5 +1,11 @@
-<h3>Upload</h3>
-<input type="file" (change)="onFileChange($event)">
-<button (click)="upload()">Upload</button>
-<p>{{ message }}</p>
-<p>This endpoint is a placeholder; backend upload endpoint needs to be implemented.</p>
+<section class="card">
+  <h3>Upload</h3>
+  <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+    <label class="file-input">
+      <input type="file" (change)="onFileChange($event)">
+    </label>
+    <button (click)="upload()">Upload</button>
+  </div>
+  <p class="footer-note">{{ message }}</p>
+  <p class="footer-note">This endpoint is a placeholder; backend upload endpoint needs to be implemented.</p>
+</section>

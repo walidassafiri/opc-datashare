@@ -39,6 +39,11 @@ public class JwtUtil {
         return claims.getSubject();
     }
 
+    public Date extractExpiration(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return claims.getExpiration();
+    }
+
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
