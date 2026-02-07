@@ -26,8 +26,6 @@ cd backend
 mvn spring-boot:run
 ```
 
-> L'API sera disponible sur http://localhost:8080 (ex: GET /api/hello)
+> L'API sera disponible sur http://localhost:8065
 
----
 
-N'hésitez pas à demander : je peux aussi lancer `npm install` ou `mvn package` pour vous, ou créer des workflows CI/CD.

@@ -1,8 +1,10 @@
 package com.example.file;
 
+import com.example.security.CustomUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,13 +26,29 @@ public class UploadController {
     private static final long MAX_SIZE = 1L * 1024 * 1024 * 1024; // 1 GB
     private static final List<String> FORBIDDEN_EXT = List.of("exe","bat","cmd","sh");
 
+    @GetMapping("/history")
+    public ResponseEntity<?> getHistory(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long ownerId = userDetails.getId();
+        
+        if (ownerId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid owner ID");
+        }
+
+        return ResponseEntity.ok(uploadService.getHistory(ownerId));
+    }
+
     @PostMapping("/upload")
     public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file,
                                     @RequestParam(required = false) Integer expirationDays,
                                     @RequestParam(required = false) String password,
                                     @RequestParam(required = false) List<String> tags,
                                     Authentication authentication) {
-        if (authentication == null || authentication.getPrincipal() == null) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
         }
 
@@ -64,8 +82,8 @@ public class UploadController {
         req.setPassword(password);
         req.setTags(tags);
 
-        Long ownerId = null;
-        try { ownerId = Long.parseLong(authentication.getName()); } catch (Exception e) { }
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long ownerId = userDetails.getId();
 
         FileMetadata meta = uploadService.store(file, ownerId, req);
         if (meta == null) {

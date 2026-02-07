@@ -14,4 +14,8 @@ export class FileService {
     if (tags && tags.length) { tags.forEach(t => fd.append('tags', t)); }
     return this.http.post<any>('/api/files/upload', fd);
   }
+
+  getHistory(): Observable<any[]> {
+    return this.http.get<any[]>('/api/files/history');
+  }
 }

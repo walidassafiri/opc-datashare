@@ -1,18 +1,49 @@
 package com.example.file;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Entity
+@Table(name = "file_metadata")
 public class FileMetadata {
+    @Id
     private String token;
+    
+    @Column(nullable = false)
     private String filename;
+    
+    @Column(nullable = false)
     private long size;
+    
+    @Column(nullable = false)
     private LocalDateTime expiresAt;
+    
+    @ElementCollection
+    @CollectionTable(name = "file_tags", joinColumns = @JoinColumn(name = "file_token"))
+    @Column(name = "tag")
     private List<String> tags;
 
+    @Column(name = "owner_id")
+    private Long ownerId;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
     public FileMetadata() {}
-    public FileMetadata(String token, String filename, long size, LocalDateTime expiresAt, List<String> tags) {
-        this.token = token; this.filename = filename; this.size = size; this.expiresAt = expiresAt; this.tags = tags;
+    
+    public FileMetadata(String token, String filename, long size, LocalDateTime expiresAt, List<String> tags, Long ownerId) {
+        this.token = token; 
+        this.filename = filename; 
+        this.size = size; 
+        this.expiresAt = expiresAt; 
+        this.tags = tags;
+        this.ownerId = ownerId;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
     }
 
     public String getToken() { return token; }
@@ -25,4 +56,8 @@ public class FileMetadata {
     public void setExpiresAt(LocalDateTime expiresAt) { this.expiresAt = expiresAt; }
     public List<String> getTags() { return tags; }
     public void setTags(List<String> tags) { this.tags = tags; }
+    public Long getOwnerId() { return ownerId; }
+    public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

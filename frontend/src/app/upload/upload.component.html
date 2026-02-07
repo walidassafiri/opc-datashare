@@ -38,4 +38,27 @@
     </div>
   </div>
 
+  <div *ngIf="history && history.length > 0" style="margin-top:1.5rem">
+    <h4>Upload History</h4>
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr style="border-bottom: 1px solid #ccc; text-align: left;">
+          <th>Filename</th>
+          <th>Date</th>
+          <th>Expires</th>
+          <th>Size</th>
+          <th>Token</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of history" style="border-bottom: 1px solid #eee;">
+          <td>{{ item.filename }}</td>
+          <td>{{ item.createdAt | date:'short' }}</td>
+          <td>{{ item.expiresAt | date:'short' }}</td>
+          <td>{{ (item.size / 1024).toFixed(1) }} KB</td>
+          <td><code>{{ item.token }}</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </section>

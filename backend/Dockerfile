@@ -5,8 +5,7 @@ COPY pom.xml .
 COPY src ./src
 RUN mvn -DskipTests package
 
-# Runtime stage
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 COPY --from=build /workspace/target/backend-0.0.1-SNAPSHOT.jar /app/app.jar
 EXPOSE 8080

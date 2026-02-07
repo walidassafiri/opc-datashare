@@ -12,8 +12,20 @@ export class UploadComponent {
   password = '';
   tagsText = '';
   result?: { token?: string; filename?: string; expiresAt?: string };
+  history: any[] = [];
 
   constructor(private fileService: FileService) {}
+
+  ngOnInit() {
+    this.loadHistory();
+  }
+
+  loadHistory() {
+    this.fileService.getHistory().subscribe({
+      next: (data) => this.history = data,
+      error: (err) => console.error('Failed to load history', err)
+    });
+  }
 
   onFileChange(event: any) {
     const f = event.target.files && event.target.files[0];
@@ -28,6 +40,7 @@ export class UploadComponent {
       next: (res) => {
         this.result = res;
         this.message = 'Upload successful';
+        this.loadHistory();
       },
       error: err => {
         this.result = undefined;
