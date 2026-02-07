@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEvent } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FileService {
   constructor(private http: HttpClient) {}
 
-  upload(file: File): Observable<HttpEvent<any>> {
+  upload(file: File, expirationDays?: number, password?: string, tags?: string[]): Observable<any> {
     const fd = new FormData();
     fd.append('file', file, file.name);
-    return this.http.post<any>('/api/files/upload', fd, { reportProgress: true, observe: 'events' });
+    if (expirationDays != null) { fd.append('expirationDays', String(expirationDays)); }
+    if (password) { fd.append('password', password); }
+    if (tags && tags.length) { tags.forEach(t => fd.append('tags', t)); }
+    return this.http.post<any>('/api/files/upload', fd);
   }
 }

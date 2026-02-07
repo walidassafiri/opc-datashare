@@ -8,6 +8,10 @@ import { FileService } from '../services/file.service';
 export class UploadComponent {
   selected?: File;
   message = '';
+  expirationDays?: number = 7;
+  password = '';
+  tagsText = '';
+  result?: { token?: string; filename?: string; expiresAt?: string };
 
   constructor(private fileService: FileService) {}
 
@@ -18,9 +22,20 @@ export class UploadComponent {
 
   upload() {
     if (!this.selected) { this.message = 'No file selected'; return; }
-    this.fileService.upload(this.selected).subscribe({
-      next: () => this.message = 'Upload started (check backend for implementation)',
-      error: err => this.message = 'Upload failed: ' + (err?.error?.message || err.statusText)
+    const tags = this.tagsText ? this.tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
+    this.message = 'Uploading...';
+    this.fileService.upload(this.selected, this.expirationDays, this.password || undefined, tags).subscribe({
+      next: (res) => {
+        this.result = res;
+        this.message = 'Upload successful';
+      },
+      error: err => {
+        this.result = undefined;
+        const status = err?.status ? `(${err.status})` : '';
+        const body = err?.error?.message || err?.error || 'Unknown error';
+        this.message = `Upload failed ${status}: ${typeof body === 'string' ? body : JSON.stringify(body)}`;
+        console.error('Upload error:', err);
+      }
     });
   }
 }

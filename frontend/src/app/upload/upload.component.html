@@ -1,11 +1,41 @@
 <section class="card">
   <h3>Upload</h3>
-  <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
-    <label class="file-input">
-      <input type="file" (change)="onFileChange($event)">
-    </label>
+
+  <label>
+    Choose file
+    <input type="file" (change)="onFileChange($event)">
+  </label>
+
+  <label>
+    Expiration days (max 7):
+    <input type="number" [(ngModel)]="expirationDays" name="expirationDays" min="1" max="7">
+  </label>
+
+  <label>
+    Password (optional, min 6 chars):
+    <input type="password" [(ngModel)]="password" name="password">
+  </label>
+
+  <label>
+    Tags (comma separated):
+    <input type="text" [(ngModel)]="tagsText" name="tags">
+  </label>
+
+  <div style="margin-top:0.6rem">
     <button (click)="upload()">Upload</button>
   </div>
+
   <p class="footer-note">{{ message }}</p>
-  <p class="footer-note">This endpoint is a placeholder; backend upload endpoint needs to be implemented.</p>
+
+  <div *ngIf="result" style="margin-top:0.8rem">
+    <div class="card" style="padding:0.6rem">
+      <div><strong>Token:</strong> {{ result.token }}</div>
+      <div *ngIf="result.filename"><strong>File:</strong> {{ result.filename }}</div>
+      <div *ngIf="result.expiresAt"><strong>Expires:</strong> {{ result.expiresAt }}</div>
+      <div style="margin-top:0.5rem">
+        <a [href]="('/api/files/download/' + result.token)">Download link (backend)</a>
+      </div>
+    </div>
+  </div>
+
 </section>
