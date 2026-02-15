@@ -52,6 +52,8 @@ public class SecurityConfig {
             .and()
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/files/download/**").permitAll()
+                    .requestMatchers("/api/files/info/**").permitAll()
                     .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

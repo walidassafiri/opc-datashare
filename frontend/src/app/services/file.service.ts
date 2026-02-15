@@ -18,4 +18,16 @@ export class FileService {
   getHistory(): Observable<any[]> {
     return this.http.get<any[]>('/api/files/history');
   }
+
+  getFileInfo(token: String): Observable<any> {
+    return this.http.get<any>(`/api/files/info/${token}`);
+  }
+
+  downloadFile(token: string, password?: string): Observable<Blob> {
+    let url = `/api/files/download/${token}`;
+    if (password) {
+      url += `?password=${encodeURIComponent(password)}`;
+    }
+    return this.http.get(url, { responseType: 'blob' });
+  }
 }

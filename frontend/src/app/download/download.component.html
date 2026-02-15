@@ -1,0 +1,29 @@
+<div class="download-container">
+  <h2>Téléchargement de fichier</h2>
+
+  <div *ngIf="loading">Chargement des informations...</div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="fileInfo && !loading">
+    <div class="file-card">
+      <p><strong>Nom :</strong> {{ fileInfo.filename }}</p>
+      <p><strong>Taille :</strong> {{ formatSize(fileInfo.size) }}</p>
+      <p><strong>Expire le :</strong> {{ fileInfo.expiresAt | date:'medium' }}</p>
+      
+      <div *ngIf="fileInfo.tags && fileInfo.tags.length > 0">
+        <strong>Tags :</strong>
+        <span *ngFor="let tag of fileInfo.tags" class="tag">{{ tag }}</span>
+      </div>
+
+      <div *ngIf="fileInfo.password" class="password-field">
+        <p>Ce fichier est protégé par un mot de passe.</p>
+        <input type="password" [(ngModel)]="password" placeholder="Entrez le mot de passe" class="form-control">
+      </div>
+
+      <button (click)="onDownload()" class="btn btn-primary mt-3">Télécharger</button>
+    </div>
+  </div>
+</div>

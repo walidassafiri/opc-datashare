@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UploadComponent } from './upload/upload.component';
+import { DownloadComponent } from './download/download.component';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'upload', component: UploadComponent, canActivate: [AuthGuard] },
+  { path: 'download/:token', component: DownloadComponent },
   { path: '**', redirectTo: '' }
 ];
 

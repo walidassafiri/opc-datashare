@@ -27,6 +27,9 @@ public class FileMetadata {
     @Column(name = "owner_id")
     private Long ownerId;
 
+    @Column
+    private String password;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
@@ -58,6 +61,8 @@ public class FileMetadata {
     public void setTags(List<String> tags) { this.tags = tags; }
     public Long getOwnerId() { return ownerId; }
     public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

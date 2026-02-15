@@ -29,12 +29,12 @@
 
   <div *ngIf="result" style="margin-top:0.8rem">
     <div class="card" style="padding:0.6rem">
-      <div><strong>Token:</strong> {{ result.token }}</div>
+      <div *ngIf="result.token">
+        <strong>Lien de partage :</strong> 
+        <a [href]="getDownloadUrl(result.token)" target="_blank">{{ getDownloadUrl(result.token) }}</a>
+      </div>
       <div *ngIf="result.filename"><strong>File:</strong> {{ result.filename }}</div>
       <div *ngIf="result.expiresAt"><strong>Expires:</strong> {{ result.expiresAt }}</div>
-      <div style="margin-top:0.5rem">
-        <a [href]="('/api/files/download/' + result.token)">Download link (backend)</a>
-      </div>
     </div>
   </div>
 
@@ -56,7 +56,7 @@
           <td>{{ item.createdAt | date:'short' }}</td>
           <td>{{ item.expiresAt | date:'short' }}</td>
           <td>{{ (item.size / 1024).toFixed(1) }} KB</td>
-          <td><code>{{ item.token }}</code></td>
+          <td><a [href]="getDownloadUrl(item.token)" target="_blank">Lien</a></td>
         </tr>
       </tbody>
     </table>

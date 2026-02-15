@@ -16,6 +16,10 @@ export class UploadComponent {
 
   constructor(private fileService: FileService) {}
 
+  getDownloadUrl(token: string): string {
+    return window.location.origin + '/download/' + token;
+  }
+
   ngOnInit() {
     this.loadHistory();
   }

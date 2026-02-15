@@ -1,14 +1,12 @@
 package com.example.file;
 
 import com.example.security.CustomUserDetails;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -25,6 +23,28 @@ public class UploadController {
 
     private static final long MAX_SIZE = 1L * 1024 * 1024 * 1024; // 1 GB
     private static final List<String> FORBIDDEN_EXT = List.of("exe","bat","cmd","sh");
+
+    @GetMapping("/download/{token}")
+    public ResponseEntity<Resource> download(@PathVariable String token, @RequestParam(required = false) String password) {
+        Resource resource = uploadService.loadAsResource(token, password);
+        if (resource == null) {
+            // On pourrait être plus précis : 404 si inexistant, 403 si mauvais mdp
+            // Mais pour simplifier et éviter le leak d'existence, on peut rester sur 404 ou Unauthorized
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    @GetMapping("/info/{token}")
+    public ResponseEntity<?> getInfo(@PathVariable String token) {
+        FileMetadata meta = uploadService.getMetadata(token);
+        if (meta == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(meta);
+    }
 
     @GetMapping("/history")
     public ResponseEntity<?> getHistory(Authentication authentication) {
