@@ -169,4 +169,45 @@ public class UploadServiceImplTest {
         // THEN
         assertNull(resource);
     }
+
+    @Test
+    void shouldDeleteFileWhenOwner() throws IOException {
+        // GIVEN
+        String token = "delete-token";
+        Long ownerId = 1L;
+        FileMetadata meta = new FileMetadata(token, "test.txt", 10, LocalDateTime.now(clock).plusDays(1), List.of(), ownerId);
+        
+        when(repository.findById(token)).thenReturn(Optional.of(meta));
+        
+        Path filePath = tempStorage.resolve(token + "_test.txt");
+        Files.write(filePath, "content".getBytes());
+
+        // WHEN
+        boolean result = uploadService.deleteFile(token, ownerId);
+
+        // THEN
+        assertTrue(result);
+        verify(repository).delete(meta);
+        assertFalse(Files.exists(filePath));
+    }
+
+    @Test
+    void shouldNotDeleteFileWhenNotOwner() throws IOException {
+        // GIVEN
+        String token = "delete-token";
+        FileMetadata meta = new FileMetadata(token, "test.txt", 10, LocalDateTime.now(clock).plusDays(1), List.of(), 1L);
+        
+        when(repository.findById(token)).thenReturn(Optional.of(meta));
+        
+        Path filePath = tempStorage.resolve(token + "_test.txt");
+        Files.write(filePath, "content".getBytes());
+
+        // WHEN
+        boolean result = uploadService.deleteFile(token, 2L);
+
+        // THEN
+        assertFalse(result);
+        verify(repository, never()).delete(any());
+        assertTrue(Files.exists(filePath));
+    }
 }

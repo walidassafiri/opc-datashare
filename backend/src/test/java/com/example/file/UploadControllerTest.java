@@ -16,8 +16,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -78,5 +78,21 @@ public class UploadControllerTest {
         when(uploadService.store(any(), any(), any())).thenReturn(meta);
 
         mvc.perform(multipart("/api/files/upload").file(file).with(user(mockUser())).with(csrf())).andExpect(status().isCreated()).andExpect(jsonPath("$.token").value("tok123"));
+    }
+
+    @Test
+    public void deleteFileReturnsNoContentWhenSuccessful() throws Exception {
+        when(uploadService.deleteFile(eq("tok123"), anyLong())).thenReturn(true);
+
+        mvc.perform(delete("/api/files/tok123").with(user(mockUser())).with(csrf()))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void deleteFileReturnsForbiddenWhenFailed() throws Exception {
+        when(uploadService.deleteFile(eq("tok123"), anyLong())).thenReturn(false);
+
+        mvc.perform(delete("/api/files/tok123").with(user(mockUser())).with(csrf()))
+                .andExpect(status().isForbidden());
     }
 }

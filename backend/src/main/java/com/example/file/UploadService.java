@@ -11,4 +11,5 @@ public interface UploadService {
     Resource loadAsResource(String token, String password);
     FileMetadata getMetadata(String token);
     void cleanupExpiredFiles();
+    boolean deleteFile(String token, Long ownerId);
 }

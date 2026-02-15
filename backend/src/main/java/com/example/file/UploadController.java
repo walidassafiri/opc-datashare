@@ -112,4 +112,21 @@ public class UploadController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(meta);
     }
+
+    @DeleteMapping("/{token}")
+    public ResponseEntity<?> deleteFile(@PathVariable String token, Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long ownerId = userDetails.getId();
+
+        boolean deleted = uploadService.deleteFile(token, ownerId);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not allowed or not found");
+        }
+    }
 }

@@ -120,14 +120,29 @@ public class UploadServiceImpl implements UploadService {
     public void cleanupExpiredFiles() {
         List<FileMetadata> expired = repository.findAllByExpiresAtBefore(LocalDateTime.now(clock));
         for (FileMetadata meta : expired) {
-            try {
-                String filename = meta.getToken() + "_" + meta.getFilename().replaceAll("[^a-zA-Z0-9._-]","_");
-                Path file = storageDir.resolve(filename);
-                Files.deleteIfExists(file);
-                repository.delete(meta);
-            } catch (IOException e) {
-                // log error or continue
-            }
+            deletePhysicalFile(meta);
+            repository.delete(meta);
+        }
+    }
+
+    @Override
+    public boolean deleteFile(String token, Long ownerId) {
+        FileMetadata meta = repository.findById(token).orElse(null);
+        if (meta != null && meta.getOwnerId().equals(ownerId)) {
+            deletePhysicalFile(meta);
+            repository.delete(meta);
+            return true;
+        }
+        return false;
+    }
+
+    private void deletePhysicalFile(FileMetadata meta) {
+        try {
+            String filename = meta.getToken() + "_" + meta.getFilename().replaceAll("[^a-zA-Z0-9._-]","_");
+            Path file = storageDir.resolve(filename);
+            Files.deleteIfExists(file);
+        } catch (IOException e) {
+            // log error or continue
         }
     }
 }

@@ -30,4 +30,8 @@ export class FileService {
     }
     return this.http.get(url, { responseType: 'blob' });
   }
+
+  deleteFile(token: string): Observable<any> {
+    return this.http.delete(`/api/files/${token}`);
+  }
 }

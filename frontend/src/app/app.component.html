@@ -1,13 +1,19 @@
 <header class="app-header">
-  <div class="brand"><div class="logo" aria-hidden></div> <div>DataShare</div></div>
-  <nav class="app-nav">
-    <a routerLink="/">Home</a>
-    <a *ngIf="!isAuthenticated()" routerLink="/login">Login</a>
-    <a *ngIf="!isAuthenticated()" routerLink="/register">Register</a>
-    <a routerLink="/upload">Upload</a>
-    <button *ngIf="isAuthenticated()" (click)="logout()" style="margin-left:0.75rem">Logout</button>
-  </nav>
+  <div class="brand" routerLink="/">DataShare</div>
+  
+  <div class="nav-right">
+    <a *ngIf="!isAuthenticated()" routerLink="/login" class="btn-login">Se connecter</a>
+    <button *ngIf="isAuthenticated()" (click)="logout()" class="btn-login">Déconnexion</button>
+    
+    <div class="user-avatar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </div>
+  </div>
 </header>
+
 <main class="container">
   <router-outlet></router-outlet>
 </main>

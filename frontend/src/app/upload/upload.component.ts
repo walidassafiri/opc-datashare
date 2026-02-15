@@ -31,6 +31,21 @@ export class UploadComponent {
     });
   }
 
+  deleteFile(token: string) {
+    if (confirm('Are you sure you want to delete this file?')) {
+      this.fileService.deleteFile(token).subscribe({
+        next: () => {
+          this.message = 'File deleted successfully';
+          this.loadHistory();
+        },
+        error: (err) => {
+          this.message = 'Delete failed';
+          console.error('Delete error:', err);
+        }
+      });
+    }
+  }
+
   onFileChange(event: any) {
     const f = event.target.files && event.target.files[0];
     if (f) { this.selected = f; }

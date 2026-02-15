@@ -1,18 +1,22 @@
-<section class="card">
-  <h3>Register</h3>
+<section class="card" style="max-width: 400px; margin: 2rem auto;">
+  <h2 style="margin-top: 0; text-align: center; font-weight: 600; margin-bottom: 2rem;">Inscription</h2>
   <form (ngSubmit)="submit()">
     <label>
-      Email:
-      <input type="email" [(ngModel)]="email" name="email" required>
+      Email
+      <input type="email" [(ngModel)]="email" name="email" required placeholder="votre@email.com">
     </label>
 
     <label>
-      Password (min 8 chars):
-      <input type="password" [(ngModel)]="password" name="password" minlength="8" required>
+      Mot de passe (min 8 chars)
+      <input type="password" [(ngModel)]="password" name="password" minlength="8" required placeholder="••••••••">
     </label>
 
-    <button type="submit">Register</button>
+    <button type="submit" class="btn-primary">S'inscrire</button>
   </form>
 
-  <p *ngIf="error" class="error">{{ error }}</p>
+  <p *ngIf="error" class="error" style="margin-top: 1rem; color: #ef4444; text-align: center; font-size: 0.9rem;">{{ error }}</p>
+
+  <p class="footer-note" style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
+    Déjà un compte ? <a routerLink="/login" style="color: #3b82f6; font-weight: 500; text-decoration: none;">Se connecter</a>
+  </p>
 </section>

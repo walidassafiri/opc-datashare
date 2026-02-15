@@ -1,7 +1,21 @@
-<section class="card hero">
-  <div>
-    <h2>Welcome to DataShare</h2>
-    <p>This is a minimal frontend focused on secure file sharing. Start by <a routerLink="/login">logging in</a> or <a routerLink="/register">creating an account</a>.</p>
-    <p class="footer-note">Protected upload page: <a routerLink="/upload">Upload</a> (requires auth)</p>
+<div class="upload-hero">
+  <h1>Bienvenue sur DataShare</h1>
+  <p style="margin-bottom: 2rem; color: #1e1b4b;">Partagez vos fichiers en toute sécurité avec des liens éphémères.</p>
+
+  <div class="upload-circle-container">
+    <div class="upload-circle-bg"></div>
+    <div class="upload-btn-main" routerLink="/upload">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.5 19A5.5 5.5 0 0 0 18 8.02a1 1 0 0 1-.84-.2 7 7 0 1 0-11.32 6.58"></path>
+        <path d="M12 12v9"></path>
+        <path d="m9 15 3-3 3 3"></path>
+      </svg>
+    </div>
   </div>
-</section>
+
+  <div style="margin-top: 2rem;">
+    <button routerLink="/upload" style="background: #0f172a; color: white; padding: 0.75rem 2rem; border-radius: 30px; border: none; font-weight: 600; cursor: pointer;">
+      Commencer à partager
+    </button>
+  </div>
+</div>
