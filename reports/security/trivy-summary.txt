@@ -1,0 +1,6 @@
+critical=3
+high=22
+medium=14
+low=8
+unknown=0
+total_findings=47

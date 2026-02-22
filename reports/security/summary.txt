@@ -1,0 +1,6 @@
+Security scan date (UTC): 2026-02-22T21:48:06Z
+Reports:
+- reports/security/npm-audit.json
+- reports/security/npm-audit-summary.txt
+- reports/security/trivy-fs.json
+- reports/security/trivy-summary.txt
