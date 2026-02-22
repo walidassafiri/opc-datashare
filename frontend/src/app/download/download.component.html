@@ -3,7 +3,7 @@
 
   <div *ngIf="loading" style="text-align: center;">Chargement des informations...</div>
 
-  <div *ngIf="error" class="error" style="color: #ef4444; text-align: center; background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+  <div data-cy="download-error" *ngIf="error" class="error" style="color: #ef4444; text-align: center; background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
     {{ error }}
   </div>
 
@@ -33,10 +33,10 @@
     <div *ngIf="fileInfo.password" style="margin-bottom: 1.5rem;">
       <label>
         Mot de passe requis
-        <input type="password" [(ngModel)]="password" placeholder="Entrez le mot de passe">
+        <input data-cy="download-password" type="password" [(ngModel)]="password" placeholder="Entrez le mot de passe">
       </label>
     </div>
 
-    <button (click)="onDownload()" class="btn-primary">Télécharger le fichier</button>
+    <button data-cy="download-submit" (click)="onDownload()" class="btn-primary">Télécharger le fichier</button>
   </div>
 </div>

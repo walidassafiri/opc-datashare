@@ -13,5 +13,11 @@
     "types": [],
     "skipLibCheck": true,
     "lib": ["es2020", "dom"]
-  }
+  },
+  "exclude": [
+    "src/test.ts",
+    "src/**/*.spec.ts",
+    "cypress/**/*",
+    "cypress.config.ts"
+  ]
 }

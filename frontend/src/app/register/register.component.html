@@ -3,15 +3,15 @@
   <form (ngSubmit)="submit()">
     <label>
       Email
-      <input type="email" [(ngModel)]="email" name="email" required placeholder="votre@email.com">
+      <input data-cy="register-email" type="email" [(ngModel)]="email" name="email" required placeholder="votre@email.com">
     </label>
 
     <label>
       Mot de passe (min 8 chars)
-      <input type="password" [(ngModel)]="password" name="password" minlength="8" required placeholder="••••••••">
+      <input data-cy="register-password" type="password" [(ngModel)]="password" name="password" minlength="8" required placeholder="••••••••">
     </label>
 
-    <button type="submit" class="btn-primary">S'inscrire</button>
+    <button data-cy="register-submit" type="submit" class="btn-primary">S'inscrire</button>
   </form>
 
   <p *ngIf="error" class="error" style="margin-top: 1rem; color: #ef4444; text-align: center; font-size: 0.9rem;">{{ error }}</p>

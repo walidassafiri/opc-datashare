@@ -5,7 +5,7 @@
   <div class="upload-circle-container">
     <div class="upload-circle-bg"></div>
     <label class="upload-btn-main">
-      <input type="file" (change)="onFileChange($event)" style="display: none">
+      <input data-cy="upload-input" type="file" (change)="onFileChange($event)" style="display: none">
       <svg *ngIf="!selected" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M17.5 19A5.5 5.5 0 0 0 18 8.02a1 1 0 0 1-.84-.2 7 7 0 1 0-11.32 6.58"></path>
         <path d="M12 12v9"></path>
@@ -17,27 +17,27 @@
     </label>
   </div>
 
-  <p class="footer-note" style="margin-top: 1rem; color: #1e1b4b;">{{ message }}</p>
+  <p data-cy="upload-message" class="footer-note" style="margin-top: 1rem; color: #1e1b4b;">{{ message }}</p>
 
   <!-- Formulaire d'options (visible seulement si un fichier est sélectionné) -->
   <div *ngIf="selected && !result" class="card" style="margin-top: 2rem; text-align: left; max-width: 440px; margin-left: auto; margin-right: auto;">
     <form>
       <label>
         Jours avant expiration (max 7)
-        <input type="number" [(ngModel)]="expirationDays" name="expirationDays" min="1" max="7">
+        <input data-cy="upload-expiration" type="number" [(ngModel)]="expirationDays" name="expirationDays" min="1" max="7">
       </label>
 
       <label>
         Mot de passe (optionnel, min 6 chars)
-        <input type="password" [(ngModel)]="password" name="password" placeholder="Protéger mon fichier">
+        <input data-cy="upload-password" type="password" [(ngModel)]="password" name="password" placeholder="Protéger mon fichier">
       </label>
 
       <label>
         Tags (séparés par des virgules)
-        <input type="text" [(ngModel)]="tagsText" name="tags" placeholder="travail, vacances, pdf...">
+        <input data-cy="upload-tags" type="text" [(ngModel)]="tagsText" name="tags" placeholder="travail, vacances, pdf...">
       </label>
 
-      <button type="button" (click)="upload()" class="btn-primary">Téléverser</button>
+      <button data-cy="upload-submit" type="button" (click)="upload()" class="btn-primary">Téléverser</button>
       <button type="button" (click)="selected = undefined" class="btn-secondary">Annuler</button>
     </form>
   </div>
@@ -47,7 +47,7 @@
     <div style="margin-bottom: 1.5rem; color: #10b981; font-weight: 700; font-size: 1.25rem;">Upload réussi !</div>
     <div style="margin-bottom: 1.5rem; background: rgba(0,0,0,0.03); padding: 1rem; border-radius: 10px;">
       <div style="font-size: 0.9rem; color: #64748b; margin-bottom: 0.5rem;">Lien de partage :</div>
-      <a [href]="getDownloadUrl(result.token!)" target="_blank" style="word-break: break-all; color: #3b82f6; font-weight: 500; text-decoration: none;">{{ getDownloadUrl(result.token!) }}</a>
+      <a data-cy="share-link" [href]="getDownloadUrl(result.token!)" target="_blank" style="word-break: break-all; color: #3b82f6; font-weight: 500; text-decoration: none;">{{ getDownloadUrl(result.token!) }}</a>
     </div>
     <button (click)="result = undefined; selected = undefined" class="btn-primary">Nouveau téléversement</button>
   </div>
@@ -73,7 +73,7 @@
         <td>{{ item.expiresAt | date:'short' }}</td>
         <td><a [href]="getDownloadUrl(item.token)" target="_blank" style="color: #3b82f6;">Lien</a></td>
         <td>
-          <button (click)="deleteFile(item.token)" style="background: #ef4444; padding: 4px 8px; font-size: 0.8rem;">Supprimer</button>
+          <button data-cy="history-delete-btn" (click)="deleteFile(item.token)" style="background: #ef4444; padding: 4px 8px; font-size: 0.8rem;">Supprimer</button>
         </td>
       </tr>
     </tbody>

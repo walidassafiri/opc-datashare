@@ -1,5 +1,7 @@
 # workspace
 /.vscode/
+/backend/.idea/
+/frontend/.idea/
 
 # frontend
 /frontend/node_modules/
@@ -7,3 +9,8 @@
 
 # backend
 /backend/target/
+
+# local command outputs / logs
+.output.txt
+output.txt
+*.output.txt
