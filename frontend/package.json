@@ -4,11 +4,16 @@
   "private": true,
   "scripts": {
     "start": "ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json",
+    "start:coverage": "ng serve --configuration coverage --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json",
     "build": "ng build",
     "test": "ng test frontend",
     "test:ci": "ng test frontend --watch=false --browsers=ChromeHeadless --code-coverage",
     "e2e": "cypress open",
-    "e2e:run": "cypress run"
+    "e2e:run": "cypress run",
+    "e2e:coverage": "cypress run",
+    "coverage:check:cypress": "nyc check-coverage --temp-dir .nyc_output --lines 80 --functions 80 --branches 80 --statements 80",
+    "coverage:merge": "nyc report --temp-dir .nyc_output --reporter=json-summary --reporter=lcov --report-dir coverage/cypress",
+    "coverage:report:cypress": "nyc report --temp-dir .nyc_output --reporter=html --reporter=text-summary --report-dir coverage/cypress"
   },
   "dependencies": {
     "@angular/animations": "^16.2.12",
@@ -25,8 +30,13 @@
   "devDependencies": {
     "@angular/cli": "^16.2.12",
     "@angular/compiler-cli": "^16.2.12",
+    "@angular-builders/custom-webpack": "^16.0.1",
     "@angular-devkit/build-angular": "^16.2.12",
+    "@babel/core": "^7.26.0",
+    "@cypress/code-coverage": "^3.14.7",
     "@types/jasmine": "^5.1.4",
+    "babel-loader": "^9.2.1",
+    "babel-plugin-istanbul": "^7.0.0",
     "cypress": "^13.17.0",
     "jasmine-core": "^5.1.1",
     "karma": "^6.4.2",
@@ -34,6 +44,7 @@
     "karma-coverage": "^2.2.1",
     "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^2.1.0",
+    "nyc": "^17.1.0",
     "typescript": "^5.1.6"
   }
 }

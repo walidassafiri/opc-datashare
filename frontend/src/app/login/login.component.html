@@ -14,7 +14,7 @@
     <button data-cy="login-submit" type="submit" class="btn-primary">Se connecter</button>
   </form>
 
-  <p *ngIf="error" class="error" style="margin-top: 1rem; color: #ef4444; text-align: center; font-size: 0.9rem;">{{ error }}</p>
+  <p data-cy="login-error" *ngIf="error" class="error" style="margin-top: 1rem; color: #ef4444; text-align: center; font-size: 0.9rem;">{{ error }}</p>
   
   <p class="footer-note" style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
     Pas de compte ? <a routerLink="/register" style="color: #3b82f6; font-weight: 500; text-decoration: none;">S'inscrire</a>

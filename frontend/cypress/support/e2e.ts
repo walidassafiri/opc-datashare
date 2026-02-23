@@ -1,1 +1,1 @@
-// Cypress support file (kept minimal on purpose)
+import "@cypress/code-coverage/support";

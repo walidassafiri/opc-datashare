@@ -32,9 +32,11 @@ Mettre en place un plan de tests simple et exécutable couvrant les fonctionnali
 - `frontend/cypress/e2e/upload-delete.cy.ts`
 - `frontend/cypress/e2e/download-wrong-password.cy.ts`
 - `frontend/cypress/e2e/upload-forbidden-extension.cy.ts`
+- `frontend/cypress/e2e/login-flow.cy.ts`
 - Scénarios:
   - `register -> upload -> download`
   - `register -> upload -> delete`
+  - `login succès + login échec`
   - `download avec mauvais mot de passe`
   - `upload extension interdite (.exe)`
 
@@ -101,6 +103,25 @@ Ou exécuter Cypress en Docker:
 docker run --rm -v "$PWD/frontend":/e2e -w /e2e cypress/included:13.17.0 cypress run --config baseUrl=http://host.docker.internal:4200
 ```
 
+### 3-bis) Coverage Cypress (frontend instrumenté)
+Terminal 1 (frontend instrumenté):
+```bash
+cd frontend
+npm install
+npm run start:coverage
+```
+
+Terminal 2 (tests + rapport coverage Cypress):
+```bash
+cd frontend
+npm run e2e:coverage
+npm run coverage:report:cypress
+npm run coverage:check:cypress
+```
+
+Rapport HTML:
+- `frontend/coverage/cypress/index.html`
+
 ### 4) Vérifier les artefacts générés
 ```bash
 # depuis la racine du repo
@@ -108,6 +129,7 @@ ls -la backend/target/site/jacoco || true
 ls -la backend/target/surefire-reports || true
 ls -la backend/target/failsafe-reports || true
 ls -la frontend/coverage/frontend || true
+ls -la frontend/coverage/cypress || true
 ```
 
 ## Résultats exploitables (emplacements)

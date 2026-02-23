@@ -1,0 +1,13 @@
+{
+  "all": false,
+  "temp-dir": ".nyc_output",
+  "report-dir": "coverage/cypress",
+  "reporter": ["text-summary", "html", "lcov"],
+  "exclude": [
+    "**/*.spec.ts",
+    "src/test.ts",
+    "cypress/**",
+    "dist/**",
+    "node_modules/**"
+  ]
+}
