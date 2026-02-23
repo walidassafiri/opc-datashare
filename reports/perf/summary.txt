@@ -1,0 +1,5 @@
+http_req_failed_rate=n/a
+http_req_duration_p95=n/a
+http_req_duration_p99=n/a
+http_req_duration_avg=n/a
+http_reqs_rate=n/a
