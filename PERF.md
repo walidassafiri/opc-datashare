@@ -57,6 +57,17 @@ Actuator est activé avec:
 Métrique principale analysée:
 - `http.server.requests` (global + filtre upload)
 
+## Budget de performance côté frontend (référence)
+Budget cible pour l'expérience utilisateur sur réseau standard:
+- LCP `< 2.5s`
+- INP `< 200ms`
+- CLS `< 0.1`
+- taille bundle initiale cible `< 350KB` (non compressé)
+
+Mesure recommandée:
+- exécuter Lighthouse sur la page d'accueil et la page upload
+- conserver les captures/rapports dans `reports/perf/` si demandées pour la soutenance
+
 ## Résultats générés
 - `reports/perf/register-response.json`
 - `reports/perf/login-response.json`

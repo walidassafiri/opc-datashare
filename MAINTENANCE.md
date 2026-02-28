@@ -43,6 +43,12 @@ docker compose logs backend --tail=100
 ./scripts/run-perf.sh
 ```
 
+## Fréquence recommandée (local)
+- Vérification `docker compose ps` et `health`: à chaque démarrage de session.
+- Scans sécurité: avant chaque livraison/démonstration.
+- Spot-check performance upload: avant chaque livraison ou après changement backend fichier.
+- Nettoyage manuel des artefacts de test/coverage: en fin de cycle de développement.
+
 ## Procédure de correction (Incident -> Fix -> Validation)
 
 ### Incident
@@ -80,6 +86,16 @@ cd ..
 ```bash
 ./scripts/run-perf.sh
 ```
+
+## Risques connus (local) et mesures
+- **Risque**: saturation disque due au dossier `uploads/`.
+  - **Mesure**: surveiller la taille et purger les fichiers non nécessaires.
+- **Risque**: token JWT compromis en environnement local partagé.
+  - **Mesure**: changer `JWT_SECRET`, limiter l'exposition de l'environnement local.
+- **Risque**: dépendances vulnérables côté frontend.
+  - **Mesure**: exécuter `./scripts/run-security.sh` régulièrement.
+- **Risque**: régression fonctionnelle après correctif.
+  - **Mesure**: exécuter systématiquement tests backend/frontend/e2e avant validation.
 
 ## Checklist pré-release
 - tests backend OK

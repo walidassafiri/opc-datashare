@@ -1,14 +1,11 @@
 openapi: 3.0.3
 info:
   title: DataShare API
-  description: API REST permettant le partage de fichiers via des liens temporaires
-  version: 1.0.0
+  description: API REST de partage de fichiers (authentification JWT, upload, download, historique).
+  version: 1.1.0
 
 servers:
   - url: /api
-
-security:
-  - bearerAuth: []
 
 components:
   securitySchemes:
@@ -25,9 +22,11 @@ components:
         email:
           type: string
           format: email
+          example: user@example.com
         password:
           type: string
           minLength: 8
+          example: password123
 
     LoginRequest:
       type: object
@@ -36,58 +35,72 @@ components:
         email:
           type: string
           format: email
+          example: user@example.com
         password:
           type: string
+          example: password123
 
     AuthResponse:
       type: object
       properties:
         token:
           type: string
+        tokenType:
+          type: string
+          example: Bearer
 
-    FileMetadata:
+    ApiError:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+
+    UserMeResponse:
       type: object
       properties:
         id:
           type: integer
-        name:
+          format: int64
+        email:
+          type: string
+          format: email
+
+    FileMetadataResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        filename:
           type: string
         size:
           type: integer
-        uploadedAt:
-          type: string
-          format: date-time
+          format: int64
         expiresAt:
           type: string
           format: date-time
-        status:
-          type: string
-          example: VALID
-
-    DownloadInfo:
-      type: object
-      properties:
-        name:
-          type: string
-        size:
+        tags:
+          type: array
+          items:
+            type: string
+        ownerId:
           type: integer
-        expiresAt:
-          type: string
-          format: date-time
-        passwordProtected:
-          type: boolean
-
-    PasswordRequest:
-      type: object
-      properties:
+          format: int64
+          nullable: true
         password:
           type: string
+          nullable: true
+          description: Peut valoir "PROTECTED" sur l'endpoint info.
+        createdAt:
+          type: string
+          format: date-time
 
 paths:
-
   /auth/register:
     post:
       summary: Création de compte utilisateur
+      tags: [Auth]
       requestBody:
         required: true
         content:
@@ -97,12 +110,21 @@ paths:
       responses:
         '201':
           description: Compte créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
         '400':
           description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
 
   /auth/login:
     post:
       summary: Connexion utilisateur
+      tags: [Auth]
       requestBody:
         required: true
         content:
@@ -118,44 +140,15 @@ paths:
                 $ref: '#/components/schemas/AuthResponse'
         '401':
           description: Identifiants invalides
-
-  /auth/register:
-    post:
-      summary: Création de compte utilisateur
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterRequest'
-      responses:
-        '201':
-          description: Compte créé
-        '400':
-          description: Données invalides
-
-  /auth/login:
-    post:
-      summary: Connexion utilisateur
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
-      responses:
-        '200':
-          description: Connexion réussie
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
-        '401':
-          description: Identifiants invalides
+                $ref: '#/components/schemas/ApiError'
 
   /auth/logout:
     post:
-      summary: Déconnexion (mise en liste noire du token)
+      summary: Déconnexion (blacklist du token JWT courant)
+      tags: [Auth]
       security:
         - bearerAuth: []
       responses:
@@ -168,27 +161,28 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: Logged out
 
-  /files/history:
+  /me:
     get:
-      summary: Historique des fichiers de l'utilisateur authentifié
+      summary: Informations de l'utilisateur authentifié
+      tags: [User]
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: Liste des fichiers
+          description: Données de l'utilisateur courant
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FileMetadata'
+                $ref: '#/components/schemas/UserMeResponse'
         '401':
           description: Non authentifié
 
   /files/upload:
     post:
-      summary: Upload de fichier (authentifié)
+      summary: Upload d'un fichier (authentifié)
+      tags: [Files]
       security:
         - bearerAuth: []
       requestBody:
@@ -208,6 +202,7 @@ paths:
                   maximum: 7
                 password:
                   type: string
+                  minLength: 6
                 tags:
                   type: array
                   items:
@@ -215,14 +210,39 @@ paths:
       responses:
         '201':
           description: Fichier uploadé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileMetadataResponse'
         '400':
-          description: Requête invalide (taille, extension, etc.)
+          description: Requête invalide (taille, extension, paramètres)
+        '401':
+          description: Non authentifié
+        '500':
+          description: Échec interne upload
+
+  /files/history:
+    get:
+      summary: Historique des fichiers de l'utilisateur authentifié
+      tags: [Files]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Liste des fichiers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileMetadataResponse'
         '401':
           description: Non authentifié
 
   /files/{token}:
     delete:
-      summary: Suppression d’un fichier (propriétaire seulement)
+      summary: Suppression d'un fichier (propriétaire seulement)
+      tags: [Files]
       security:
         - bearerAuth: []
       parameters:
@@ -234,12 +254,15 @@ paths:
       responses:
         '204':
           description: Fichier supprimé
+        '401':
+          description: Non authentifié
         '403':
-          description: Accès interdit ou fichier introuvable
+          description: Non autorisé ou fichier introuvable
 
   /files/info/{token}:
     get:
-      summary: Métadonnées du fichier (informations de téléchargement)
+      summary: Métadonnées publiques d'un fichier
+      tags: [Files]
       parameters:
         - name: token
           in: path
@@ -252,13 +275,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DownloadInfo'
+                $ref: '#/components/schemas/FileMetadataResponse'
         '404':
-          description: Fichier introuvable
+          description: Fichier introuvable ou expiré
 
   /files/download/{token}:
     get:
-      summary: Télécharger un fichier (paramètre password en query)
+      summary: Télécharger un fichier
+      tags: [Files]
       parameters:
         - name: token
           in: path
@@ -272,9 +296,11 @@ paths:
             type: string
       responses:
         '200':
-          description: Contenu du fichier
+          description: Flux binaire du fichier
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
         '403':
-          description: Mot de passe invalide ou accès interdit
-        '404':
-          description: Fichier introuvable
-
+          description: Mot de passe invalide, fichier expiré ou introuvable
