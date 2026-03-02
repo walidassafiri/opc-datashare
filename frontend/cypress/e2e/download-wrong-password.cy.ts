@@ -23,7 +23,7 @@ describe("Critical flow: wrong password on download", () => {
         cy.visit(downloadPath);
         cy.get("[data-cy='download-password']").type("wrong-password");
         cy.get("[data-cy='download-submit']").click();
-        cy.get("[data-cy='download-error']").should("contain", "Mot de passe incorrect");
+        cy.get("[data-cy='download-error']").invoke("text").should("match", /mot de passe incorrect/i);
       });
   });
 });

@@ -20,6 +20,21 @@ export class ErrorInterceptor implements HttpInterceptor {
   private toUserMessage(err: HttpErrorResponse): string {
     const serverMessage = this.extractServerMessage(err);
     const url = err.url || '';
+    const serverMessageLc = (serverMessage || '').toLowerCase();
+    const uploadUrl = url.includes('/api/files/upload');
+
+    if (
+      uploadUrl &&
+      (
+        err.status === 413 ||
+        serverMessageLc.includes('maximum upload size') ||
+        serverMessageLc.includes('max upload size') ||
+        serverMessageLc.includes('request entity too large') ||
+        serverMessageLc.includes('file too large')
+      )
+    ) {
+      return 'Fichier trop volumineux. Taille maximale autorisée: 1 Go.';
+    }
 
     // Keep domain-specific messages when backend provides one.
     if (serverMessage) {

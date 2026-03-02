@@ -7,6 +7,7 @@ import { FileService } from '../services/file.service';
   styleUrls: ['./upload.component.css']
 })
 export class UploadComponent {
+  private static readonly MAX_FILE_SIZE_BYTES = 1024 * 1024 * 1024; // 1 GB
   selected?: File;
   message = '';
   expirationDays?: number = 7;
@@ -91,11 +92,25 @@ export class UploadComponent {
 
   onFileChange(event: any) {
     const f = event.target.files && event.target.files[0];
-    if (f) { this.selected = f; }
+    if (!f) {
+      return;
+    }
+    if (f.size > UploadComponent.MAX_FILE_SIZE_BYTES) {
+      this.selected = undefined;
+      this.result = undefined;
+      this.message = 'Fichier trop volumineux. Taille maximale autorisée: 1 Go.';
+      return;
+    }
+    this.selected = f;
+    this.message = '';
   }
 
   upload() {
     if (!this.selected) { this.message = 'No file selected'; return; }
+    if (this.selected.size > UploadComponent.MAX_FILE_SIZE_BYTES) {
+      this.message = 'Fichier trop volumineux. Taille maximale autorisée: 1 Go.';
+      return;
+    }
     const tags = this.tagsText ? this.tagsText.split(',').map(t => t.trim()).filter(Boolean) : [];
     this.message = 'Uploading...';
     this.fileService.upload(this.selected, this.expirationDays, this.password || undefined, tags).subscribe({
