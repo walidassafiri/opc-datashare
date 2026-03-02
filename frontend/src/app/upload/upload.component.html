@@ -54,28 +54,47 @@
 </div>
 
 <!-- Historique (en bas de page) -->
-<div *ngIf="history && history.length > 0" class="history-container">
-  <h4 style="margin-top: 0;">Historique de vos partages</h4>
-  <table>
-    <thead>
-      <tr>
-        <th>Fichier</th>
-        <th>Date</th>
-        <th>Expiration</th>
-        <th>Lien</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of history">
-        <td>{{ item.filename }}</td>
-        <td>{{ item.createdAt | date:'short' }}</td>
-        <td>{{ item.expiresAt | date:'short' }}</td>
-        <td><a [href]="getDownloadUrl(item.token)" target="_blank" style="color: #3b82f6;">Lien</a></td>
-        <td>
-          <button data-cy="history-delete-btn" (click)="deleteFile(item.token)" style="background: #ef4444; padding: 4px 8px; font-size: 0.8rem;">Supprimer</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div *ngIf="history && history.length > 0" class="history-container history-panel">
+  <div class="history-dashboard">
+    <aside class="history-sidebar">
+      <div class="history-logo">DataShare</div>
+      <div class="history-nav-item active">Mes fichiers</div>
+      <div class="history-footer-note">Copyright DataShare 2026</div>
+    </aside>
+
+    <section class="history-main">
+      <h4 class="history-title">Mes fichiers</h4>
+
+      <div class="history-filters" role="tablist" aria-label="Filtrer les fichiers">
+        <button type="button" class="history-filter-btn" [class.active]="historyFilter === 'all'" (click)="setHistoryFilter('all')">Tous</button>
+        <button type="button" class="history-filter-btn" [class.active]="historyFilter === 'active'" (click)="setHistoryFilter('active')">Actifs</button>
+        <button type="button" class="history-filter-btn" [class.active]="historyFilter === 'expired'" (click)="setHistoryFilter('expired')">Expiré</button>
+      </div>
+
+      <div class="history-list">
+        <div class="history-item" *ngFor="let item of filteredHistory" [class.expired]="isExpired(item)">
+          <div class="history-item-main">
+            <div class="history-item-icon" aria-hidden="true">📄</div>
+            <div class="history-item-meta">
+              <div class="history-item-name">{{ item.filename }}</div>
+              <div class="history-item-subline">
+                <span [class.status-expired]="isExpired(item)">
+                  {{ expirationLabel(item) }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="history-item-actions" *ngIf="!isExpired(item)">
+            <a class="history-action-btn" [href]="getDownloadUrl(item.token)" target="_blank">Accéder</a>
+            <button data-cy="history-delete-btn" class="history-action-btn danger" type="button" (click)="deleteFile(item.token)">Supprimer</button>
+          </div>
+
+          <div class="history-item-expired-msg" *ngIf="isExpired(item)">
+            Ce fichier a expiré, il n’est plus stocké chez nous
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>

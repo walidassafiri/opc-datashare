@@ -122,3 +122,7 @@ cd ..
 - Aucun changement d’API.
 - Aucun changement de schéma ou type.
 - Aucun impact runtime applicatif (documentation uniquement).
+
+## Revue technique IA
+- Le rapport de revue technique du code produit avec assistance IA est disponible dans:
+  - `AI_CODE_REVIEW.md`

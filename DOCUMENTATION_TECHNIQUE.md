@@ -103,6 +103,10 @@ Référence détaillée:
 - procédures de maintenance/correction:
   - `MAINTENANCE.md`
 
+### 6.5 Revue technique du code IA
+- revue humaine du code produit avec assistance IA:
+  - `AI_CODE_REVIEW.md`
+
 ## 7. Processus d'installation et d'exécution
 
 ### 7.1 Prérequis

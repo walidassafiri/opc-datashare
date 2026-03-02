@@ -3,7 +3,8 @@ import { FileService } from '../services/file.service';
 
 @Component({
   selector: 'app-upload',
-  templateUrl: './upload.component.html'
+  templateUrl: './upload.component.html',
+  styleUrls: ['./upload.component.css']
 })
 export class UploadComponent {
   selected?: File;
@@ -13,6 +14,7 @@ export class UploadComponent {
   tagsText = '';
   result?: { token?: string; filename?: string; expiresAt?: string };
   history: any[] = [];
+  historyFilter: 'all' | 'active' | 'expired' = 'all';
 
   constructor(private fileService: FileService) {}
 
@@ -29,6 +31,47 @@ export class UploadComponent {
       next: (data) => this.history = data,
       error: (err) => console.error('Failed to load history', err)
     });
+  }
+
+  get filteredHistory(): any[] {
+    if (!this.history || this.history.length === 0) {
+      return [];
+    }
+    if (this.historyFilter === 'active') {
+      return this.history.filter(item => !this.isExpired(item));
+    }
+    if (this.historyFilter === 'expired') {
+      return this.history.filter(item => this.isExpired(item));
+    }
+    return this.history;
+  }
+
+  setHistoryFilter(filter: 'all' | 'active' | 'expired') {
+    this.historyFilter = filter;
+  }
+
+  isExpired(item: any): boolean {
+    if (!item?.expiresAt) {
+      return false;
+    }
+    return new Date(item.expiresAt).getTime() < Date.now();
+  }
+
+  expirationLabel(item: any): string {
+    if (!item?.expiresAt) {
+      return 'Expiration inconnue';
+    }
+    const expires = new Date(item.expiresAt).getTime();
+    const diffMs = expires - Date.now();
+    if (diffMs <= 0) {
+      return 'Expiré';
+    }
+    const dayMs = 24 * 60 * 60 * 1000;
+    const days = Math.ceil(diffMs / dayMs);
+    if (days <= 1) {
+      return 'Expire demain';
+    }
+    return `Expire dans ${days} jours`;
   }
 
   deleteFile(token: string) {

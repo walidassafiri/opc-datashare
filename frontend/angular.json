@@ -26,7 +26,10 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.json",
-            "assets": [],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": ["src/styles.css"]
           },
           "configurations": {
@@ -36,7 +39,14 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "350kb",
+                  "maximumError": "500kb"
+                }
+              ]
             },
             "coverage": {
               "customWebpackConfig": {

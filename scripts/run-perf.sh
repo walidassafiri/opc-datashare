@@ -51,9 +51,17 @@ const summaryPath = `${outDir}/k6-summary.json`;
 const raw = JSON.parse(fs.readFileSync(summaryPath, "utf8"));
 
 const m = raw.metrics || {};
-const reqDuration = (m.http_req_duration && m.http_req_duration.values) || {};
-const reqFailed = (m.http_req_failed && m.http_req_failed.values) || {};
-const reqRate = (m.http_reqs && m.http_reqs.values) || {};
+// k6 summary format may expose values either directly at metric level
+// or nested in a "values" object depending on version/config.
+function metricValues(metric) {
+  if (!metric) return {};
+  if (metric.values && typeof metric.values === "object") return metric.values;
+  return metric;
+}
+
+const reqDuration = metricValues(m.http_req_duration);
+const reqFailed = metricValues(m.http_req_failed);
+const reqRate = metricValues(m.http_reqs);
 
 const lines = [
   `http_req_failed_rate=${reqFailed.rate ?? "n/a"}`,

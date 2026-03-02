@@ -65,7 +65,14 @@ Budget cible pour l'expérience utilisateur sur réseau standard:
 - taille bundle initiale cible `< 350KB` (non compressé)
 
 Mesure recommandée:
-- exécuter Lighthouse sur la page d'accueil et la page upload
+- exécuter Lighthouse sur un build **production** (pas `ng serve` en mode dev)
+- commande frontend:
+```bash
+cd frontend
+npm run lighthouse:prod
+```
+- rapport généré:
+  - `frontend/lighthouse.prod.report.html`
 - conserver les captures/rapports dans `reports/perf/` si demandées pour la soutenance
 
 ## Résultats générés

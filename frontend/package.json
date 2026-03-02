@@ -6,6 +6,7 @@
     "start": "ng serve --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json",
     "start:coverage": "ng serve --configuration coverage --host 0.0.0.0 --port 4200 --proxy-config proxy.conf.json",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "test": "ng test frontend",
     "test:ci": "ng test frontend --watch=false --browsers=ChromeHeadless --code-coverage",
     "e2e": "cypress open",
@@ -13,7 +14,8 @@
     "e2e:coverage": "cypress run",
     "coverage:check:cypress": "nyc check-coverage --temp-dir .nyc_output --lines 80 --functions 80 --branches 80 --statements 80",
     "coverage:merge": "nyc report --temp-dir .nyc_output --reporter=json-summary --reporter=lcov --report-dir coverage/cypress",
-    "coverage:report:cypress": "nyc report --temp-dir .nyc_output --reporter=html --reporter=text-summary --report-dir coverage/cypress"
+    "coverage:report:cypress": "nyc report --temp-dir .nyc_output --reporter=html --reporter=text-summary --report-dir coverage/cypress",
+    "lighthouse:prod": "npm run build:prod && ./scripts/run-lighthouse-prod.sh"
   },
   "dependencies": {
     "@angular/animations": "^16.2.12",
