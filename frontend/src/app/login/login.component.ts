@@ -17,7 +17,7 @@ export class LoginComponent {
     this.error = '';
     this.auth.login(this.email, this.password).subscribe({
       next: () => this.router.navigate(['/upload']),
-      error: (err) => this.error = err?.error?.message || 'Login failed'
+      error: (err) => this.error = err?.userMessage || 'Connexion impossible.'
     });
   }
 }

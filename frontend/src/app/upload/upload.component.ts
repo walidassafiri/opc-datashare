@@ -82,7 +82,7 @@ export class UploadComponent {
           this.loadHistory();
         },
         error: (err) => {
-          this.message = 'Delete failed';
+          this.message = err?.userMessage || 'Suppression impossible.';
           console.error('Delete error:', err);
         }
       });
@@ -106,9 +106,7 @@ export class UploadComponent {
       },
       error: err => {
         this.result = undefined;
-        const status = err?.status ? `(${err.status})` : '';
-        const body = err?.error?.message || err?.error || 'Unknown error';
-        this.message = `Upload failed ${status}: ${typeof body === 'string' ? body : JSON.stringify(body)}`;
+        this.message = err?.userMessage || 'Upload impossible.';
         console.error('Upload error:', err);
       }
     });

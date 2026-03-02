@@ -17,7 +17,7 @@ export class RegisterComponent {
     this.error = '';
     this.auth.register(this.email, this.password).subscribe({
       next: () => this.router.navigate(['/upload']),
-      error: (err) => this.error = err?.error?.message || 'Registration failed'
+      error: (err) => this.error = err?.userMessage || 'Inscription impossible.'
     });
   }
 }

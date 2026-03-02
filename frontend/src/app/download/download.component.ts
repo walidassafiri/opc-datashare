@@ -25,7 +25,7 @@ export class DownloadComponent implements OnInit {
           this.loading = false;
         },
         error: (err) => {
-          this.error = 'Lien invalide ou fichier expiré.';
+          this.error = err?.userMessage || 'Lien invalide ou fichier expiré.';
           this.loading = false;
         }
       });
@@ -49,11 +49,7 @@ export class DownloadComponent implements OnInit {
         window.URL.revokeObjectURL(url);
       },
       error: (err) => {
-        if (err.status === 403) {
-          this.error = 'Mot de passe incorrect.';
-        } else {
-          this.error = 'Erreur lors du téléchargement.';
-        }
+        this.error = err?.userMessage || 'Erreur lors du téléchargement.';
       }
     });
   }
