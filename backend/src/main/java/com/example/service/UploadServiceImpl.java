@@ -1,5 +1,8 @@
-package com.example.file;
+package com.example.service;
 
+import com.example.file.UploadRequest;
+import com.example.model.FileMetadata;
+import com.example.repository.FileMetadataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

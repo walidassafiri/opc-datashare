@@ -1,5 +1,7 @@
 package com.example.user;
 
+import com.example.controller.UserController;
+import com.example.model.User;
 import com.example.security.CustomUserDetails;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;

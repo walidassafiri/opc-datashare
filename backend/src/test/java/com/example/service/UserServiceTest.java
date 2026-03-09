@@ -2,8 +2,8 @@ package com.example.service;
 
 import com.example.dto.RegisterRequest;
 import com.example.exception.EmailAlreadyExistsException;
-import com.example.user.User;
-import com.example.user.UserRepository;
+import com.example.model.User;
+import com.example.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

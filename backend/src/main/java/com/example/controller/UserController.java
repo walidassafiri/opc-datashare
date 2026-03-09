@@ -1,4 +1,4 @@
-package com.example.user;
+package com.example.controller;
 
 import com.example.security.CustomUserDetails;
 import org.springframework.http.ResponseEntity;

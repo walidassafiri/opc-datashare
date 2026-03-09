@@ -2,6 +2,7 @@ package com.example.config;
 
 import com.example.security.CustomUserDetailsService;
 import com.example.security.JwtAuthenticationFilter;
+import com.example.security.TokenBlacklistService;
 import com.example.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,9 +24,9 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
-    private final com.example.security.TokenBlacklistService tokenBlacklistService;
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtUtil jwtUtil, com.example.security.TokenBlacklistService tokenBlacklistService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtUtil jwtUtil, TokenBlacklistService tokenBlacklistService) {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
         this.tokenBlacklistService = tokenBlacklistService;

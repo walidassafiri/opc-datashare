@@ -1,9 +1,10 @@
-package com.example.auth;
+package com.example.controller;
 
 import com.example.dto.AuthResponse;
 import com.example.dto.LoginRequest;
 import com.example.dto.RegisterRequest;
 import com.example.security.TokenBlacklistService;
+import com.example.service.AuthService;
 import com.example.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;

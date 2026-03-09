@@ -1,7 +1,10 @@
-package com.example.file;
+package com.example.service;
 
+import com.example.file.UploadRequest;
+import com.example.model.FileMetadata;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 public interface UploadService {

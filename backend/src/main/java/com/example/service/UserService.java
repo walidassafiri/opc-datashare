@@ -1,9 +1,9 @@
 package com.example.service;
 
 import com.example.dto.RegisterRequest;
-import com.example.user.User;
-import com.example.user.UserRepository;
 import com.example.exception.EmailAlreadyExistsException;
+import com.example.model.User;
+import com.example.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

@@ -25,6 +25,13 @@ Deux schémas sont fournis:
 | Perf | k6 + métriques Actuator | JMeter, Gatling | Scriptable, léger et facile à intégrer en local |
 | Sécurité outillage | npm audit + Trivy | Snyk, OWASP DC | Outils courants et compatibles CI/local |
 
+### 2.1 Organisation backend en couches
+- `controller` : endpoints REST et mapping HTTP
+- `service` : logique métier, validations métier, orchestration
+- `repository` : accès aux données via Spring Data JPA
+- `model` : entités métier persistées
+- `dto` : objets d'entrée/sortie de l'API
+
 ## 3. Modèle de données
 
 ### 3.1 MCD/ERD conforme au code actuel

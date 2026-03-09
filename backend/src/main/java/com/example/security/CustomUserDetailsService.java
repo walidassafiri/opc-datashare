@@ -1,7 +1,7 @@
 package com.example.security;
 
-import com.example.user.User;
-import com.example.user.UserRepository;
+import com.example.model.User;
+import com.example.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

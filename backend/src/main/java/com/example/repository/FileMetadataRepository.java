@@ -1,6 +1,8 @@
-package com.example.file;
+package com.example.repository;
 
+import com.example.model.FileMetadata;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -1,11 +1,11 @@
-package com.example.auth;
+package com.example.service;
 
 import com.example.dto.AuthResponse;
 import com.example.dto.LoginRequest;
 import com.example.dto.RegisterRequest;
 import com.example.exception.InvalidCredentialsException;
 import com.example.service.UserService;
-import com.example.user.User;
+import com.example.model.User;
 import com.example.util.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

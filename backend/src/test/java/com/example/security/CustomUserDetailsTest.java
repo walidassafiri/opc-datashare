@@ -1,6 +1,6 @@
 package com.example.security;
 
-import com.example.user.User;
+import com.example.model.User;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,7 +1,7 @@
 package com.example.integration;
 
-import com.example.file.FileMetadata;
-import com.example.file.FileMetadataRepository;
+import com.example.model.FileMetadata;
+import com.example.repository.FileMetadataRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;

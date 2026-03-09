@@ -1,6 +1,9 @@
-package com.example.file;
+package com.example.controller;
 
+import com.example.file.UploadRequest;
+import com.example.model.FileMetadata;
 import com.example.security.CustomUserDetails;
+import com.example.service.UploadService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

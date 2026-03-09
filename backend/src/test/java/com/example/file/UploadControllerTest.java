@@ -1,14 +1,16 @@
 package com.example.file;
 
+import com.example.controller.UploadController;
+import com.example.model.FileMetadata;
 import com.example.security.CustomUserDetails;
-import com.example.user.User;
+import com.example.model.User;
+import com.example.service.UploadService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
