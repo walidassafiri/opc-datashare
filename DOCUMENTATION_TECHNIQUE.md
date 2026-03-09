@@ -4,26 +4,22 @@
 
 Deux schémas sont fournis:
 - `mcd-opc3.jpg`: vue d'ensemble architecture + MCD existant
-- `schema-architecture-front-back.svg`: schéma applicatif détaillé en français montrant:
-  - l'architecture front Angular
-  - les interactions du front avec le back Spring Boot
-  - les échanges API REST / JWT
-  - les dépendances backend vers PostgreSQL et le stockage local
+- `schema-architecture.png`: schéma de l'architecture de l'application
 
 ## 2. Choix technologiques justifiés
 
-| Élément | Technologie choisie | Alternatives | Justification |
-|---|---|---|---|
-| Frontend | Angular 16 + TypeScript | React, Vue | Structure claire pour formulaires/auth/routing, cohérent pour app monolithique front |
-| Backend | Spring Boot 3 + Java 17 | Node.js/Express, .NET | Écosystème robuste API REST, sécurité, tests, intégration JPA |
+| Élément | Technologie choisie                 | Alternatives | Justification |
+|---|-------------------------------------|---|---|
+| Frontend | Angular 16 + TypeScript             | React, Vue | Structure claire pour formulaires/auth/routing, cohérent pour app monolithique front |
+| Backend | Spring Boot 3 + Java 17             | Node.js/Express, .NET | Écosystème robuste API REST, sécurité, tests, intégration JPA |
 | Authentification | JWT (JJWT) + filtre Spring Security | Session serveur, OAuth2 complet | Simple pour API stateless, adapté au scope du projet |
-| Base de données | PostgreSQL 15 | MySQL, MongoDB | Modèle relationnel adapté (users, metadata fichiers, tags) |
-| Persistance | Spring Data JPA | JDBC direct, MyBatis | Productivité et mapping rapide entités/repository |
-| Stockage fichier | File system local (`uploads/`) | S3/MinIO | Suffisant pour environnement local/projet de démonstration |
-| Tests backend | JUnit 5 + Mockito + Spring Test + JaCoCo | TestNG | Standard Spring, couverture outillée et seuil qualité |
-| Tests frontend/e2e | Karma/Jasmine + Cypress | Playwright | Couverture unitaire + parcours utilisateur critiques |
-| Perf | k6 + métriques Actuator | JMeter, Gatling | Scriptable, léger et facile à intégrer en local |
-| Sécurité outillage | npm audit + Trivy | Snyk, OWASP DC | Outils courants et compatibles CI/local |
+| Base de données | PostgreSQL 15                       | MySQL, MongoDB | Modèle relationnel adapté (users, metadata fichiers, tags) |
+| Persistance | Spring Data JPA                     | JDBC direct, MyBatis | Productivité et mapping rapide entités/repository |
+| Stockage fichier | File system local (`uploads/`)      | S3/MinIO | Suffisant pour environnement local/projet de démonstration |
+| Tests backend | Mockito + Spring Test + JaCoCo      | TestNG | Standard Spring, couverture outillée et seuil qualité |
+| Tests frontend/e2e | junit + Karma/Jasmine + Cypress     | Playwright | Couverture unitaire + parcours utilisateur critiques |
+| Perf | k6 + métriques Actuator             | JMeter, Gatling | Scriptable, léger et facile à intégrer en local |
+| Sécurité outillage | npm audit + Trivy                   | Snyk, OWASP DC | Outils courants et compatibles CI/local |
 
 ### 2.1 Organisation backend en couches
 - `controller` : endpoints REST et mapping HTTP
@@ -154,9 +150,10 @@ Contributions humaines :
   - `Service`
   - `Repository`
 - mise en place de l’authentification JWT et de la logique de sécurité backend.
+- conception des tests 
 
 Tâches confiées à l'IA:
-- implémentation principale de la partie frontend Angular,
+- implémentation de certaines fonctionnalités du frontend et du css/html,
 - génération initiale de tests ciblés (backend/frontend/e2e),
 - rédaction et structuration de la documentation technique,
 - propositions d'amélioration sur qualité/sécurité/performance.
@@ -168,7 +165,7 @@ Supervision et corrections humaines:
 - arbitrage final sur les choix de conception et de sécurité.
 
 Apports constatés:
-- gain de temps sur rédaction et cadrage qualité, expertise dont je manque sur la partie frontend.
+- gain de temps sur rédaction et cadrage qualité.
 
 Limites constatées:
 - nécessité de revue manuelle stricte pour éviter les incohérences (ex: schéma MCD théorique non aligné implémentation réelle).
