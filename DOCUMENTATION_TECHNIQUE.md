@@ -2,7 +2,13 @@
 
 ## 1. Architecture globale + interactions
 
- L'architecture globale est définie dans le fichier mcd-opc3.jpg
+Deux schémas sont fournis:
+- `mcd-opc3.jpg`: vue d'ensemble architecture + MCD existant
+- `schema-architecture-front-back.svg`: schéma applicatif détaillé en français montrant:
+  - l'architecture front Angular
+  - les interactions du front avec le back Spring Boot
+  - les échanges API REST / JWT
+  - les dépendances backend vers PostgreSQL et le stockage local
 
 ## 2. Choix technologiques justifiés
 
